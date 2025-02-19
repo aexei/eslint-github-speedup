@@ -27,9 +27,18 @@ jobs:
             **.html
             **.ts
 
-      - name: Print info
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.11'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Lint
+        if: steps.file_changes.outputs.test_any_changed == 'true'  
         run: |
-            INPUT_STRING="${{ github.event.inputs.files_string }}"
+            INPUT_STRING="${{ steps.file_changes.outputs.all_changed_files }}"
             OUTPUT=""
             
             for FILE in $INPUT_STRING; do
@@ -39,19 +48,10 @@ jobs:
             OUTPUT="${OUTPUT# }"
             echo "args=$OUTPUT" >> $GITHUB_OUTPUT
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20.11'
-      
-      - name: Install dependencies
-        run: npm install
-      
+            npm run lint -- $OUTPUT
+            
       - name: Build
         run: npm run build
-      
-      - name: Lint
-        run: npm run lint
       
       - name: Test
         run: npm run test:ci
