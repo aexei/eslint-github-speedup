@@ -22,7 +22,10 @@ jobs:
         id: file_changes
         uses: tj-actions/changed-files@v38
         with:
-          
+          files: |
+            **.css
+            **.html
+            **.ts
 
       - name: Print info
         run: |
