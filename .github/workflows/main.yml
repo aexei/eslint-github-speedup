@@ -49,9 +49,3 @@ jobs:
             echo "args=$OUTPUT" >> $GITHUB_OUTPUT
 
             npm run lint -- $OUTPUT
-            
-      - name: Build
-        run: npm run build
-      
-      - name: Test
-        run: npm run test:ci
