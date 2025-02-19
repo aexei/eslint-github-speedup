@@ -22,9 +22,9 @@ jobs:
         id: file_changes
         uses: tj-actions/changed-files@v45
         with:
-          files_yaml: |
-            src:
-              - src/**
+          files: |
+            src/**
+
         #   files: |
         #     *.component.html
         #     *.container.html
