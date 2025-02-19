@@ -23,8 +23,9 @@ jobs:
         uses: tj-actions/changed-files@v38
         with:
           files: |
-            **.css
-            **.html
+            *.component.html
+            *.container.html
+            *.component.ts
             **.ts
 
       - name: Use Node.js
@@ -36,10 +37,12 @@ jobs:
         run: npm install
       
       - name: Lint
-        if: steps.file_changes.outputs.test_any_changed == 'true'  
+        # if: steps.file_changes.outputs.test_any_changed == 'true'  
         run: |
             INPUT_STRING="${{ steps.file_changes.outputs.all_changed_files }}"
             OUTPUT=""
+
+            echo $INPUT_STRING
             
             for FILE in $INPUT_STRING; do
               OUTPUT="$OUTPUT --lint-file-patterns $FILE"
