@@ -21,12 +21,12 @@ jobs:
       - name: Get changed files
         id: file_changes
         uses: tj-actions/changed-files@v38
-        with:
-          files: |
-            *.component.html
-            *.container.html
-            *.component.ts
-            **.ts
+        # with:
+        #   files: |
+        #     *.component.html
+        #     *.container.html
+        #     *.component.ts
+        #     **.ts
 
       - name: Use Node.js
         uses: actions/setup-node@v4
