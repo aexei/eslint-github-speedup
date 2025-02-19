@@ -22,14 +22,20 @@ jobs:
         id: file_changes
         uses: tj-actions/changed-files@v38
         with:
-          separator: "--lint-file-patterns "
+          
 
       - name: Print info
         run: |
-          git rev-parse --short HEAD
-          echo ${{ github.event.pull_request.base.sha }}
-          echo '${{ steps.file_changes.outputs.all_changed_files}}'
-      
+            INPUT_STRING="${{ github.event.inputs.files_string }}"
+            OUTPUT=""
+            
+            for FILE in $INPUT_STRING; do
+              OUTPUT="$OUTPUT --lint-file-patterns $FILE"
+            done
+
+            OUTPUT="${OUTPUT# }"
+            echo "args=$OUTPUT" >> $GITHUB_OUTPUT
+
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
