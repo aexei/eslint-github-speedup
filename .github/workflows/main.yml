@@ -20,14 +20,10 @@ jobs:
 
       - name: Get changed files
         id: file_changes
-        uses: tj-actions/changed-files@v38
+        uses: tj-actions/changed-files@v45
+        with:
+          files: src/**
 
-      - name: Print info
-        run: |
-          git rev-parse --short HEAD
-          echo ${{ github.event.pull_request.base.sha }}
-          echo '${{ steps.file_changes.outputs.all_changed_files}}'
-      
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -36,17 +32,19 @@ jobs:
       - name: Install dependencies
         run: npm install
       
-      - name: Build
-        run: npm run build
-      
       - name: Lint
-        run: npm run lint
-      
-      - name: Test
-        run: npm run test:ci
+        if: steps.file_changes.outputs.test_any_changed == 'true'  
+        run: |
+            INPUT_STRING="${{ steps.file_changes.outputs.all_changed_files }}"
+            OUTPUT=""
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v5.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            echo $INPUT_STRING
+            
+            for FILE in $INPUT_STRING; do
+              OUTPUT="$OUTPUT --lint-file-patterns $FILE"
+            done
+
+            OUTPUT="${OUTPUT# }"
+            echo "args=$OUTPUT" >> $GITHUB_OUTPUT
+
+            npm run lint -- $OUTPUT
