@@ -22,14 +22,7 @@ jobs:
         id: file_changes
         uses: tj-actions/changed-files@v45
         with:
-          files: |
-            src/**
-
-        #   files: |
-        #     *.component.html
-        #     *.container.html
-        #     *.component.ts
-        #     **.ts
+          files: src/**
 
       - name: Use Node.js
         uses: actions/setup-node@v4
